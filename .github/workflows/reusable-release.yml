@@ -2,8 +2,7 @@ name: Reusable - Release
 
 on:
   workflow_call:
-    secrets: inherit
-
+  
     inputs:
       node_version:
         type: string

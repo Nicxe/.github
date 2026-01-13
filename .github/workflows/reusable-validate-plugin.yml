@@ -2,7 +2,6 @@ name: Reusable - Validate (plugin)
 
 on:
   workflow_call:
-    secrets: inherit
     inputs:
       hacs_action_version:
         type: string
