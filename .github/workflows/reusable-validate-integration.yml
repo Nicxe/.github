@@ -53,6 +53,6 @@ jobs:
         uses: home-assistant/actions/hassfest@master
 
       - name: HACS validation
-        uses: hacs/action@v1.0.0
+        uses: hacs/action@main
         with:
           category: ${{ inputs.hacs_category }}
