@@ -1,0 +1,47 @@
+name: Reusable - Release
+
+on:
+  workflow_call:
+    inputs:
+      node_version:
+        type: string
+        required: false
+        default: "22"
+      npm_registry_url:
+        type: string
+        required: false
+        default: "https://npm.pkg.github.com"
+      npm_scope:
+        type: string
+        required: false
+        default: "@nicxe"
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  packages: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node_version }}
+          cache: npm
+          registry-url: ${{ inputs.npm_registry_url }}
+          scope: ${{ inputs.npm_scope }}
+
+      - run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
+
+      - run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}

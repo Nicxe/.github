@@ -1,0 +1,27 @@
+name: Reusable - Validate (plugin)
+
+on:
+  workflow_call:
+    inputs:
+      hacs_action_version:
+        type: string
+        required: false
+        default: "v1.0.0"
+      hacs_category:
+        type: string
+        required: false
+        default: "plugin"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: HACS validation
+        uses: hacs/action@${{ inputs.hacs_action_version }}
+        with:
+          category: ${{ inputs.hacs_category }}
