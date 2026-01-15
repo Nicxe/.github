@@ -1,0 +1,36 @@
+name: Reusable - Sync beta back to dev after prerelease
+
+on:
+  workflow_call:
+    inputs:
+      beta_branch:
+        type: string
+        required: false
+        default: "beta"
+      dev_branch:
+        type: string
+        required: false
+        default: "dev"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge beta into dev
+        run: |
+          git checkout ${{ inputs.dev_branch }}
+          git merge origin/${{ inputs.beta_branch }} --no-edit
+          git push origin ${{ inputs.dev_branch }}

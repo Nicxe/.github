@@ -1,0 +1,36 @@
+name: Reusable - Sync main back to beta after release
+
+on:
+  workflow_call:
+    inputs:
+      main_branch:
+        type: string
+        required: false
+        default: "main"
+      beta_branch:
+        type: string
+        required: false
+        default: "beta"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge main into beta
+        run: |
+          git checkout ${{ inputs.beta_branch }}
+          git merge origin/${{ inputs.main_branch }} --no-edit
+          git push origin ${{ inputs.beta_branch }}
