@@ -24,13 +24,5 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Configure git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Merge main into beta
-        run: |
-          git checkout ${{ inputs.beta_branch }}
-          git merge origin/${{ inputs.main_branch }} --no-edit
-          git push origin ${{ inputs.beta_branch }}
+      - name: Force push main to beta
+        run: git push origin ${{ inputs.main_branch }}:${{ inputs.beta_branch }} --force
